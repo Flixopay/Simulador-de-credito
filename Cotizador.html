@@ -1,132 +1,263 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Simulador de crédito</title>
-        <!-- Enlace a Google Fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-        <style>
-            body {
-                font-family: 'Poppins', sans-serif; /* Cambiado a Poppins */
-                background-color: #f9f9f9;
-                margin: 0;
-                padding: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de crédito</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            max-width: 180px;
+            height: auto;
+        }
+
+        .title {
+            text-align: center;
+            color: #2d3748;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #4a5568;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            background: white;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-input::placeholder {
+            color: #a0aec0;
+            font-weight: 400;
+        }
+
+        .quick-months {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .month-btn {
+            padding: 12px 8px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            color: #4a5568;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .month-btn:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .month-btn.active {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .simulate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .simulate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .simulate-btn:active {
+            transform: translateY(0);
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+            transform: translateY(10px);
+            opacity: 0;
+            transition: all 0.5s ease;
+            display: none;
+        }
+
+        .result-card.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .result-label {
+            font-size: 14px;
+            font-weight: 400;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .result-amount {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .result-period {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .disclaimer {
+            font-size: 12px;
+            color: #718096;
+            line-height: 1.5;
+            text-align: center;
+            background: #f7fafc;
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 24px;
+                margin: 10px;
+            }
+            
+            .title {
+                font-size: 24px;
+            }
+            
+            .result-amount {
+                font-size: 28px;
             }
 
-        .simulador {
-            background-color: #fff;
-            border: 2px solid #7761ff;
-            border-radius: 8px;
-            width: 350px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .simulador h1 {
-            color: #7761ff;
-            margin-bottom: 20px;
-        }
-
-        .campo {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .campo label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .campo input, .campo select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        .resultado {
-            margin: 20px 0;
-            font-size: 24px;
-            color: #7761ff;
-            font-weight: bold;
-        }
-
-        .boton {
-            background-color: #7761ff;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .boton:hover {
-            background-color: #191923;
-        }
-
-        .nota {
-            font-size: 12px;
-            color: #666;
-            margin-top: 10px;
+            .quick-months {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="simulador-container">
-        <!-- Logo de Flixopay -->
-        <img src="https://flixopay.com/images/Logo.png" alt="Logo Flixopay">
-        <style>
-            .simulador-container {
-                width: 100%;
-                max-width: 400px;
-                padding: 20px;
-                background: white;
-                border: 1px solid #ddd;
-                border-radius: 10px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-                text-align: center; /* Centrar contenido horizontalmente */
-            }
+    <div class="container">
+        <div class="logo">
+            <img src="https://flixopay.com/images/Logo.png" alt="Logo Flixopay">
+        </div>
         
-            .simulador-container img {
-                display: block; /* Asegura que se comporte como bloque */
-                margin: 0 auto 20px; /* Centrar horizontalmente y agregar espacio inferior */
-                max-width: 150px; /* Limitar el ancho del logo */
-            }
-        </style>
-    <div class="simulador">
-        <h1>Simula tu crédito</h1>
-        <div class="resultado" id="pagoMensual">Pago mensual estimado: $0</div>
-        <div class="campo">
-            <label for="monto">Monto del préstamo</label>
-            <input type="number" id="monto" placeholder="¿Cuanto necesitas?" min="1000000" max="9999999">
+        <h1 class="title">Simula tu crédito</h1>
+        
+        <div class="form-group">
+            <label for="monto" class="form-label">¿Cuánto necesitas?</label>
+            <input type="text" id="monto" class="form-input" placeholder="$0" min="10000" max="9999999">
         </div>
-        <div class="campo">
-            <label for="plazo">¿A cuántos meses?</label>
-            <select id="plazo">
-    <!-- Opciones de cuotas generadas dinámicamente -->
-</select>
+        
+        <div class="form-group">
+            <label class="form-label">¿A cuántos meses?</label>
+            <div class="quick-months">
+                <button type="button" class="month-btn" data-months="1">1 mes</button>
+                <button type="button" class="month-btn" data-months="2">2 meses</button>
+                <button type="button" class="month-btn" data-months="3">3 meses</button>
+                <button type="button" class="month-btn" data-months="4">4 meses</button>
+                <button type="button" class="month-btn" data-months="5">5 meses</button>
+                <button type="button" class="month-btn" data-months="6">6 meses</button>
+            </div>
         </div>
-        <div class="campo">
-            <label for="totalPagar">Valor total a pagar</label>
-            <input type="text" id="totalPagar" value="$0" readonly>
+        
+        <button type="button" class="simulate-btn" id="calcular">
+            ✨ Simular mi crédito
+        </button>
+        
+        <div class="result-card" id="resultCard">
+            <div class="result-label">Tu cuota mensual será de:</div>
+            <div class="result-amount" id="pagoMensual">$0</div>
+            <div class="result-period" id="periodoText"></div>
         </div>
-        <button class="boton" id="calcular">Simular</button>
-        <p class="nota">
-            Estos valores solo representan una proyección estimada de tu crédito. Para conocer más sobre el valor final, solicita tu crédito. Según el perfil crediticio, este podría incluir un fondo de garantías o aval, el cual tendría un costo variable entre el 15-20% más IVA sobre el valor del crédito.
-        </p>
+        
+        <div class="disclaimer">
+            💡 <strong>Simulación estimada:</strong> Los valores mostrados son una proyección. El valor final puede variar según tu perfil crediticio y podría incluir un fondo de garantías del 15-20% + IVA.
+        </div>
     </div>
+
     <script>
-        // Función para formatear números como moneda
+        let montoSeleccionado = 0;
+        let mesesSeleccionados = 0;
+
+        // Función para formatear números como moneda colombiana
         function formatearMoneda(valor) {
             return new Intl.NumberFormat("es-CO", {
                 style: "currency",
@@ -135,69 +266,96 @@
             }).format(valor);
         }
 
+        // Función para formatear input mientras se escribe
+        function formatearInput(input) {
+            let valor = input.value.replace(/[^\d]/g, ''); // Solo números
+            if (valor) {
+                let numero = parseInt(valor);
+                input.value = formatearMoneda(numero);
+                montoSeleccionado = numero;
+            } else {
+                input.value = '';
+                montoSeleccionado = 0;
+            }
+        }
+
         // Función para redondear a múltiplos de 500
         function redondearAMultiplos500(valor) {
             return Math.round(valor / 500) * 500;
         }
-    
-        // Función para generar las opciones del selector de cuotas
-        function generarOpcionesCuotas() {
-            const plazoInput = document.getElementById("plazo");
-            plazoInput.innerHTML = ""; // Limpiar opciones existentes
-    
-            for (let i = 1; i <= 24; i++) {
-                const opcion = document.createElement("option");
-                opcion.value = i;
-                opcion.textContent = `${i} ${i === 1 ? "mes" : "meses"}`;
-                plazoInput.appendChild(opcion);
-            }
+
+        // Función para mostrar el resultado con animación
+        function mostrarResultado(pagoMensual, plazo) {
+            const resultCard = document.getElementById("resultCard");
+            const pagoMensualElement = document.getElementById("pagoMensual");
+            const periodoElement = document.getElementById("periodoText");
+            
+            pagoMensualElement.textContent = formatearMoneda(pagoMensual);
+            periodoElement.textContent = `por ${plazo} ${plazo === 1 ? "mes" : "meses"}`;
+            
+            resultCard.style.display = "block";
+            setTimeout(() => {
+                resultCard.classList.add("show");
+            }, 100);
         }
-    
+
+        // Función para ocultar el resultado
+        function ocultarResultado() {
+            const resultCard = document.getElementById("resultCard");
+            resultCard.classList.remove("show");
+            setTimeout(() => {
+                resultCard.style.display = "none";
+            }, 300);
+        }
+
         // Función para calcular el crédito
         function calcularCredito() {
-            // Obtener valores de los campos
-            const montoInput = document.getElementById("monto");
-            const plazoInput = document.getElementById("plazo");
-            const monto = parseFloat(montoInput.value);
-            const plazo = parseInt(plazoInput.value);
-    
-            // Validar que el monto esté dentro del rango permitido
-            if (isNaN(monto) || monto < 10000 || monto > 9999999) {
-                alert("Por favor, ingresa un monto válido entre $10,000 y $9,999,999.");
+            if (montoSeleccionado < 10000 || montoSeleccionado > 9999999) {
+                alert("⚠️ Por favor, ingresa un monto válido entre $10,000 y $9,999,999");
+                ocultarResultado();
                 return;
             }
-    
-            // Validar que el plazo sea un número válido
-            if (isNaN(plazo) || plazo < 1 || plazo > 24) {
-                alert("Por favor, selecciona un plazo válido.");
-                return;
-            }
-    
-            // Definir una tasa de interés fija (por ejemplo, 1.87% mensual)
-            const tasaInteresMensual = 0.05;
-    
-            // Calcular el pago mensual (fórmula de cuota fija)
-            const pagoMensualCalculado = (monto * tasaInteresMensual) / 
-                                (1 - Math.pow(1 + tasaInteresMensual, -plazo));
 
-            // Redondear el pago mensual a múltiplos de 500
+            if (mesesSeleccionados < 1 || mesesSeleccionados > 6) {
+                alert("⚠️ Por favor, selecciona un plazo válido");
+                ocultarResultado();
+                return;
+            }
+
+            // Calcular pago mensual
+            const tasaInteresMensual = 0.05;
+            const pagoMensualCalculado = (montoSeleccionado * tasaInteresMensual) / 
+                                        (1 - Math.pow(1 + tasaInteresMensual, -mesesSeleccionados));
             const pagoMensual = redondearAMultiplos500(pagoMensualCalculado);
-    
-            // Calcular el valor total a pagar usando el pago redondeado
-            const totalPagar = pagoMensual * plazo;
-    
-            // Actualizar los campos de resultados
-            document.getElementById("pagoMensual").textContent = 
-                `Pago mensual estimado: ${formatearMoneda(pagoMensual)}`;
-            document.getElementById("totalPagar").value = formatearMoneda(totalPagar);
+
+            // Mostrar resultado
+            mostrarResultado(pagoMensual, mesesSeleccionados);
         }
-    
-        // Generar opciones de cuotas al cargar la página
-        document.addEventListener("DOMContentLoaded", generarOpcionesCuotas);
-    
-        // Agregar eventos
-        document.getElementById("calcular").addEventListener("click", calcularCredito);
-        document.getElementById("plazo").addEventListener("change", calcularCredito);
-    </script>    
+
+        // Event listeners
+        document.addEventListener("DOMContentLoaded", function() {
+            // Input de monto
+            const montoInput = document.getElementById("monto");
+            
+            montoInput.addEventListener("input", function() {
+                formatearInput(this);
+            });
+
+            // Botones de meses
+            const monthBtns = document.querySelectorAll(".month-btn");
+            monthBtns.forEach(btn => {
+                btn.addEventListener("click", function() {
+                    // Remover active de todos
+                    monthBtns.forEach(b => b.classList.remove("active"));
+                    // Agregar active al clickeado
+                    this.classList.add("active");
+                    mesesSeleccionados = parseInt(this.getAttribute("data-months"));
+                });
+            });
+
+            // Botón simular
+            document.getElementById("calcular").addEventListener("click", calcularCredito);
+        });
+    </script>
 </body>
 </html>
