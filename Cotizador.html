@@ -134,6 +134,11 @@
                 minimumFractionDigits: 0
             }).format(valor);
         }
+
+        // Función para redondear a múltiplos de 500
+        function redondearAMultiplos500(valor) {
+            return Math.round(valor / 500) * 500;
+        }
     
         // Función para generar las opciones del selector de cuotas
         function generarOpcionesCuotas() {
@@ -172,10 +177,13 @@
             const tasaInteresMensual = 0.05;
     
             // Calcular el pago mensual (fórmula de cuota fija)
-            const pagoMensual = (monto * tasaInteresMensual) / 
+            const pagoMensualCalculado = (monto * tasaInteresMensual) / 
                                 (1 - Math.pow(1 + tasaInteresMensual, -plazo));
+
+            // Redondear el pago mensual a múltiplos de 500
+            const pagoMensual = redondearAMultiplos500(pagoMensualCalculado);
     
-            // Calcular el valor total a pagar
+            // Calcular el valor total a pagar usando el pago redondeado
             const totalPagar = pagoMensual * plazo;
     
             // Actualizar los campos de resultados
